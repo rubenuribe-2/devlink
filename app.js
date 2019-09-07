@@ -27,10 +27,10 @@ app.use(session({
 const users=[{
     email: "johnf@gmail.com",
     password: "1234",
-    name: "John Feris",
-    profilePic: "howdy.jpg",
-    desc: "Computer Scientist",
-    skills: ["js","node"],
+    name: "Martin Wnorowski",
+    profilePic: "default-pic.jpg",
+    desc: "Hi my name is Martin I like to study all the time, and get shit done. come join me on my adventure to build something cool",
+    skills: ["js","node","flask","basketweaving","php","cloud","gcp","aws","react"],
     interests: ["cows","walking"],
     links: ["me.dev"],
     connections: ["erikw@gmail.com", "rubenu@gmail.com"]
@@ -90,6 +90,7 @@ app.get("/", function(req, res){
 });
 app.get("/log", function(req,res){
     const contacts = users[users.map(x => x.email ).indexOf("johnf@gmail.com")].connections;
+    const persona = users[users.map(x => x.email ).indexOf("johnf@gmail.com")];
     console.log("\n\n\n"+contacts);
     const friends=[];
     contacts.forEach(function(contact){ 
@@ -97,7 +98,7 @@ app.get("/log", function(req,res){
         friends.push(fullContact)
     });
     console.log(friends);
-    res.render('loggedin',{persona:"johnf@gmail.com", friends:friends});
+    res.render('loggedin',{persona:persona, friends:friends});
     
 });
 
