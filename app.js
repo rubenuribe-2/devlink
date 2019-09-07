@@ -85,8 +85,8 @@ app.get("/login", function(req,res){
   res.render("login")
 });
 
-app.post("/login", function(req, res){
 
+app.post("/login", function(req, res){
   const user = new User({
     username: req.body.username,
     password: req.body.password
@@ -101,10 +101,13 @@ app.post("/login", function(req, res){
       });
     }
   });
-
 });
 
 
+app.get("/logout", function(req, res){
+  req.logout();
+  res.redirect("/");
+});
 
 
 
