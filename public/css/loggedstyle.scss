@@ -23,6 +23,7 @@ $color5: rgba(252, 255, 252, 1);
 .tabs{
     grid-area: t;
     background: $color4;
+    border-left: $color5 3px solid;
     border-bottom: $color5 3px solid;
 
 }

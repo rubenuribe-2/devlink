@@ -10,6 +10,7 @@
 .tabs {
   grid-area: t;
   background: #2d3a3a;
+  border-left: #fcfffc 3px solid;
   border-bottom: #fcfffc 3px solid;
 }
 
