@@ -11,6 +11,9 @@ $color2: rgba(36, 130, 50, 1);
 $color3: rgba(43, 168, 74, 1);
 $color4: rgba(45, 58, 58, 1);
 $color5: rgba(252, 255, 252, 1);
+::-webkit-scrollbar {
+    display: none;
+}
 .full-screen{
     display: grid;
     height: calc(100vh - 58px);
@@ -23,11 +26,42 @@ $color5: rgba(252, 255, 252, 1);
 .tabs{
     grid-area: t;
     background: $color4;
-    border-left: $color5 3px solid;
+    border-left: $color5 1px solid;
     border-bottom: $color5 3px solid;
+    .tab-links{
+        float: right;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+        // margin-right: 20%;
+        .btn-dark{
+            background: $color4;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            text-align: center;
+            align-items: center;
+            justify-content: space-around;
+            letter-spacing: 1.5px;
+        }
+        .btn-dark:hover{
+            background: $color1;
+        }
+        li{
+            list-style: none;
+            color: $color5;
+            // margin-right: 20px;
+            font-size: 1.2em;
+        }
+    }
 
 }
 .contacts{
+    overflow: scroll;
+    scrollbar-width: none;
     grid-area: c;
     background: $color4;
 }
@@ -54,6 +88,8 @@ $color5: rgba(252, 255, 252, 1);
         border-radius: 50%;
         margin: 10px;
     }
+}.contact:hover{
+    background: $color1;
 }
 #contact-header{
     color: $color5;
@@ -64,5 +100,37 @@ $color5: rgba(252, 255, 252, 1);
 
 
 .page{
+    overflow: scroll;
+    scrollbar-width: none;
+    .profile-container{
+        position: relative;
+        h3{
+            margin-bottom: 0;
+        }
+    }
     grid-area: p;
+    img{
+        width: 350px;
+    }
+    .about-user{
+        display: inline-block;
+        margin-left: 20px;
+        max-width: calc(80% - 300px);
+        margin-top: auto;
+        position: absolute;
+        bottom: 0;
+        h1{
+            font-size: 3em;
+            text-decoration: underline;
+        }
+    }
+    hr{
+        border: 2px $color1 solid;
+    }
+    ul{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        list-style: circle;
+    }
 }
