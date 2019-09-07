@@ -15,6 +15,15 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
+app.use(session({
+    secret: "MaryHadALittleLamb",
+    resave: false,
+    saveUninitialized: false
+  }));
+  
+  app.use(passport.initialize());
+  app.use(passport.session());
+
 const users=[{
     email: "johnf@gmail.com",
     password: "1234",
@@ -47,9 +56,9 @@ const users=[{
     links: ["me.dev"],
     connections: ["johnf@gmail.com"]
 }
-]
+];
 
-// mongoose.connect("mongodb://localhost:27017/devlinkDB", {useNewUrlParser: true});
+mongoose.connect("mongodb://localhost:27017/devlinkDB", {useNewUrlParser: true});
 
 const userSchema = new mongoose.Schema({
   username: String,
@@ -65,6 +74,8 @@ const userSchema = new mongoose.Schema({
 });
 
 // User1.save();
+
+userSchema.plugin(passportLocalMongoose);
 
 const User = mongoose.model("User", userSchema);
 
