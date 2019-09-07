@@ -1,0 +1,67 @@
+/* HSL */
+$color1: hsla(180%, 58%, 4%, 1);
+$color2: hsla(129%, 57%, 33%, 1);
+$color3: hsla(135%, 59%, 41%, 1);
+$color4: hsla(180%, 13%, 20%, 1);
+$color5: hsla(120%, 100%, 99%, 1);
+
+/* RGB */
+$color1: rgba(4, 15, 15, 1);
+$color2: rgba(36, 130, 50, 1);
+$color3: rgba(43, 168, 74, 1);
+$color4: rgba(45, 58, 58, 1);
+$color5: rgba(252, 255, 252, 1);
+.full-screen{
+    display: grid;
+    height: calc(100vh - 58px);
+    grid-template:
+                "c t t t" 50px
+                "c p p p" auto
+                "c p p p" auto
+                "c p p p" auto / 20% auto auto auto;
+}
+.tabs{
+    grid-area: t;
+    background: $color4;
+    border-bottom: $color5 3px solid;
+
+}
+.contacts{
+    grid-area: c;
+    background: $color4;
+}
+.contact-wrapper{
+    // margin-top: 20px;
+    ul{
+        padding-left: 0;
+    }
+}
+.contact{
+    color: $color5;
+    padding-left: 40px;
+    border-bottom: $color5 1px solid;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    h2{
+        padding-top: 8px;
+    }
+    img{
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin: 10px;
+    }
+}
+#contact-header{
+    color: $color5;
+    height: 50px;
+    padding-left: 40px;
+    border-bottom: $color5 3px solid;
+}
+
+
+.page{
+    grid-area: p;
+}
