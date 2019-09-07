@@ -15,15 +15,6 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-app.use(session({
-    secret: "MaryHadALittleLamb",
-    resave: false,
-    saveUninitialized: false
-  }));
-  
-  app.use(passport.initialize());
-  app.use(passport.session());
-
 const users=[{
     email: "johnf@gmail.com",
     password: "1234",
@@ -56,7 +47,7 @@ const users=[{
     links: ["me.dev"],
     connections: ["johnf@gmail.com"]
 }
-];
+]
 
 mongoose.connect("mongodb://localhost:27017/devlinkDB", {useNewUrlParser: true});
 
@@ -75,8 +66,6 @@ const userSchema = new mongoose.Schema({
 
 // User1.save();
 
-userSchema.plugin(passportLocalMongoose);
-
 const User = mongoose.model("User", userSchema);
 
 passport.use(User.createStrategy());
@@ -88,21 +77,23 @@ passport.deserializeUser(User.deserializeUser());
 app.get("/", function(req, res){
     res.render('home');
 });
+
 app.get("/log", function(req,res){
+
     const contacts = users[users.map(x => x.email ).indexOf("johnf@gmail.com")].connections;
     console.log("\n\n\n"+contacts);
     const friends=[];
-    contacts.forEach(function(contact){ 
+    contacts.forEach(function(contact){
         const fullContact = users[users.map(x => x.email).indexOf(contact)];
         friends.push(fullContact)
     });
     console.log(friends);
-    
+
 
 
 
     res.render('loggedin',{persona:"johnf@gmail.com", friends:friends});
-    
+
 });
 
 
@@ -133,19 +124,6 @@ app.get("/logout", function(req, res){
   req.logout();
   res.redirect("/");
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 app.listen(3000,function(){
     console.log("listening on port 3000");
