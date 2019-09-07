@@ -97,13 +97,27 @@ app.get("/log", function(req,res){
         friends.push(fullContact)
     });
     console.log(friends);
-    
-
-
-
     res.render('loggedin',{persona:"johnf@gmail.com", friends:friends});
     
 });
+
+app.get("/register", function(req,res){
+    res.render('register');
+  });
+  
+  app.post("/register", function(req,res){
+    User.register({username: req.body.username}, req.body.password, function(err, user){
+      if(err){
+        console.log(err);
+        res.redirect("/register");
+      }else{
+        passport.authenticate("local")(req, res, function(){
+          res.redirect("/log");
+        });
+      }
+  
+    });
+  });
 
 
 app.get("/login", function(req,res){
