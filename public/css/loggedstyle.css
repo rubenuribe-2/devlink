@@ -1,0 +1,63 @@
+/* HSL */
+/* RGB */
+.full-screen {
+  display: -ms-grid;
+  display: grid;
+  height: calc(100vh - 58px);
+  grid-template: "c t t t" 50px "c p p p" auto "c p p p" auto "c p p p" auto / 20% auto auto auto;
+}
+
+.tabs {
+  grid-area: t;
+  background: #2d3a3a;
+  border-bottom: #fcfffc 3px solid;
+}
+
+.contacts {
+  grid-area: c;
+  background: #2d3a3a;
+}
+
+.contact-wrapper ul {
+  padding-left: 0;
+}
+
+.contact {
+  color: #fcfffc;
+  padding-left: 40px;
+  border-bottom: #fcfffc 1px solid;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.contact h2 {
+  padding-top: 8px;
+}
+
+.contact img {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin: 10px;
+}
+
+#contact-header {
+  color: #fcfffc;
+  height: 50px;
+  padding-left: 40px;
+  border-bottom: #fcfffc 3px solid;
+}
+
+.page {
+  grid-area: p;
+}
+/*# sourceMappingURL=loggedstyle.css.map */

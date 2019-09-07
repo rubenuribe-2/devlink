@@ -1,0 +1,10 @@
+<div class="contact-wrapper">
+<ul class="">
+<% friends.forEach(function(friend){ %>
+    <div class="contact">
+        <img src="img/<%=friend.profilePic%>" alt="">
+        <h2><%=friend.name%></h2>
+    </div>
+<% }); %>
+</ul>
+</div>

@@ -58,6 +58,8 @@ body {
 #navbar .logo h3 {
   margin-right: 10px;
   margin-bottom: 0;
+  text-decoration: none;
+  color: #fcfffc;
 }
 
 #navbar .logo img {
@@ -119,6 +121,7 @@ body {
   position: absolute;
   left: 0;
   top: 50%;
+  width: calc(100vw - 20%);
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
 }
@@ -129,5 +132,6 @@ body {
   -webkit-text-stroke-width: 2px;
   -webkit-text-stroke-color: black;
   font-family: 'Cabin', sans-serif;
+  display: block;
 }
 /*# sourceMappingURL=style.css.map */
