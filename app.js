@@ -336,8 +336,10 @@ app.post("/edit-profile",function(req,res){
     });
     res.redirect('/logg');
 });
-app.get("/logout",function(req,res){
 
+app.get("/logout",function(req,res){
+  req.logout();
+  res.redirect("/");
 });
 
 
