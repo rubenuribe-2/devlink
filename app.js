@@ -153,7 +153,7 @@ app.get("/log", function(req,res){
         friends.push(fullContact)
     });
     res.render('loggedin',{persona:persona, friends:friends});
-    
+
     const server=io.of('/').on('connection',function(socket){
         console.log(`connected to ${socket.id}`);
         socket.on('discover',function(id,user){
@@ -183,7 +183,7 @@ app.get("/log", function(req,res){
             socket.to(id).emit('message');//send the data that is needed for message
         });
     });
-    
+
 
 });
 
@@ -241,36 +241,10 @@ app.post("/login", function(req, res){
 
 });
 
-
 app.get("/logout", function(req, res){
   req.logout();
   res.redirect("/");
 });
-
-// app.get("/connect", function(req,res){
-//   currentUser = req.user.username;
-//
-//   sb.connect(currentUser, function(user, error) {
-//     if (error) {
-//         return;
-//       }
-//
-//   });
-//
-//   sb.OpenChannel.createChannel(function(openChannel, error) {
-//     if (error) {
-//         return;
-//     }
-// });
-//
-// });
-
-
-
-
-
-
-
 
 http.listen(process.env.PORT || 3000, function(err){
     if(err){
