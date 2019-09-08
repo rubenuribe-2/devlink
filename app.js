@@ -151,14 +151,14 @@ passport.use(new GoogleStrategy({
 //           console.log("Successfully saved default items to DB.");
 //         }
 //       });
-
-// User.updateOne({_id : "5d74c9a305b7905f78c56ed4"},{name: "Lucas Rollo", skills: "1 2 3", interests: "4 5 6 ", connections: ["ruben@gmail.com", "sabrina@gmail.com"], likes: ["martin@gmail.com"]}, function(err){
-//   if (err){
-//     console.log(err);
-//   }else{
-//     console.log("success update");
-//   }
-// });
+//
+User.updateOne({_id : "5d74dcecf7e95d50d4c21b25"},{name: "Lucas Rollo", skills: "1 2 3", interests: "4 5 6 ", connections: ["ruben@gmail.com", "sabrina@gmail.com"], likes: ["martin@gmail.com"]}, function(err){
+  if (err){
+    console.log(err);
+  }else{
+    console.log("success update");
+  }
+});
 
 app.get("/", function(req, res){
     res.render('home');
@@ -167,21 +167,32 @@ app.get("/", function(req, res){
 app.get("/logg", function(req,res){
   if (req.isAuthenticated()){
 
-    console.log(req.user.connections);
-
     mongoose.set('useCreateIndex', true);
 
     const contacts =req.user.connections;
     const persona = req.user;
-    const friends=[];
-    contacts.forEach(function(contact){
-      User.find({email: contact}, function(err, foundUsers){
-        friends.push(foundUsers);
+    var friends=[];
+
+    for (i = 0; i < contacts.length; i++){
+      User.find({username: contacts[i]}, function(err, foundUsers){
+        console.log(foundUsers);
+        if(err){
+          console.log(err);
+        }else{
+          if(foundUsers[0]){
+            friends.push(foundUsers[0]);
+            console.log(`adding ${foundUsers} to friends`);
+            console.log(`friends: ${friends}`);
+          }
+        }
+      }).then(function(){
+        res.render('loggedin',{persona:persona, friends:friends})
       });
+      console.log(`friends: ${friends}`);
         // const fullContact = users[users.map(x => x.email).indexOf(contact)];
         // friends.push(fullContact)
-    });
-    res.render('loggedin',{persona:persona, friends:friends});
+    }
+    console.log(`friends: ${friends}`);
 
     const server=io.of('/').on('connection',function(socket){
         console.log(`connected to ${socket.id}`);
@@ -247,7 +258,7 @@ app.get("/logg", function(req,res){
             socket.emit('new-connection',friends);
     });
             // res.redirect('back');
-            
+
           }
         });
         socket.on('message',function(id,message){
@@ -328,17 +339,27 @@ app.post("/edit-profile",function(req,res){
     const desc=req.body.desc;
     const skills=req.body.skills;
     const interests=req.body.interests;
+<<<<<<< HEAD
     User.updateOne({_id:req.user._id},{name: name, desc: desc, skills: skills, interests: interests},function(err){
       if(err){
         console.log(err);
       } else {
         console.log("sucess");
+=======
+    User.updateOne({_id:req.user._id},{name: name, desc: desc, skills: skills, interests: interests}, function(err){
+      if(err){
+        console.log(err);
+      }else{
+        console.log("successfully updated");
+>>>>>>> 75264d75f2ec07ae53ea1d9b7356b27bdc63c207
       }
     });
     res.redirect('/logg');
 });
-app.get("/logout",function(req,res){
 
+app.get("/logout",function(req,res){
+  req.logout();
+  res.redirect("/");
 });
 
 
