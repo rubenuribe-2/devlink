@@ -5,6 +5,12 @@ body {
   background: #fcfffc;
 }
 
+.section {
+  margin-top: 5%;
+  margin-left: 20%;
+  margin-right: 20%;
+}
+
 #navbar {
   display: -webkit-box;
   display: -ms-flexbox;

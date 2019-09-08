@@ -1,0 +1,21 @@
+<%-include('partials/header2')-%>
+<div class="section">
+<form action="edit-profile" class="edit-profile" method="post">
+        <h2>Name:</h2>
+        <label for="name" class="sr-only">Name</label>
+        <input type="textfield" name="name" id="name" class="form-control" placeholder="name" value="<%=user.name%>">
+        <h3>Description:</h3>
+        <label for="name" class="sr-only">Description</label>
+        <textarea type="text" name="desc" id="name" class="form-control"><%=user.desc%></textarea>
+        <h3>Skills:</h3>
+        <label for="name" class="sr-only">Skills</label>
+        <textarea type="text" name="skills" id="name" class="form-control"><%=user.skills%></textarea>
+        <h3>Interests</h3>
+        <label for="name" class="sr-only">Interests</label>
+        <textarea type="text" name="interests" id="name" class="form-control" placeholder="Interests"><%=user.interests%></textarea>
+        <h3>Profile Picture:</h3>
+        <input type="file" name="image" accept="image/gif, image/jpeg, image/png">
+        <button class="btn btn-success" type="submit">Save</button>
+</form>
+</div>
+<%-include('partials/footer')-%>

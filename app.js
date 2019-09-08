@@ -42,9 +42,8 @@ const userSchema = new mongoose.Schema({
   name: String,
   profilePic: String,
   desc: String,
-  skills: [],
-  interests: [],
-  links: [],
+  skills: String,
+  interests: String,
   likes: [],
   connections: []
 });
@@ -110,19 +109,6 @@ const users=[{
 
 mongoose.connect("mongodb://localhost:27017/devlinkDB", {useNewUrlParser: true});
 
-const userSchema = new mongoose.Schema({
-  email: String,
-  password: String,
-  googleId: String,
-  name: String,
-  profilePic: String,
-  desc: String,
-  skills: [],
-  interests: [],
-  links: [],
-  likes: [],
-  connections: []
-});
 
 // User1.save();
 
@@ -150,7 +136,8 @@ passport.use(new GoogleStrategy({
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
   function(accessToken, refreshToken, profile, cb) {
-    User.findOrCreate({ googleId: profile.id }, function (err, user) {
+    console.log(profile);
+    User.findOrCreate({ googleId: profile.id, name:profile.name, profilePic: profile.picture}, function (err, user) {
       return cb(err, user);
     });
   }
@@ -259,7 +246,7 @@ app.get("/register", function(req,res){
         res.redirect("/register");
       }else{
         passport.authenticate("local")(req, res, function(){
-          res.redirect("/logg");
+          res.redirect("/edit-profile");
         });
       }
 
@@ -275,7 +262,7 @@ app.get("/register", function(req,res){
     passport.authenticate('google', { failureRedirect: '/login' }),
     function(req, res) {
       // Successful authentication, redirect home.
-      res.redirect('/logg');
+      res.redirect('/edit-profile');
     });
 
 app.get("/login", function(req,res){
@@ -302,7 +289,15 @@ app.post("/login", function(req, res){
 });
 
 app.get("/edit-profile",function(req,res){
-  res.render('edit-profile',{});
+  res.render('edit-profile',{user:req.user});
+});
+app.post("/edit-profile",function(req,res){
+    const name=req.body.name;
+    const desc=req.body.desc;
+    const skills=req.body.skills;
+    const interests=req.body.interests;
+    User.updateOne({_id:req.user._id},{name: name, desc: desc, skills: skills, interests: interests});
+    res.redirect('/logg');
 });
 app.get("/logout",function(req,res){
 

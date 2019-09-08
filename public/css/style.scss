@@ -16,6 +16,11 @@ $color5: rgba(252, 255, 252, 1);
 body{
     background: $color5;
 }
+.section{
+    margin-top: 5%;
+    margin-left: 20%;
+    margin-right: 20%;
+}
 #navbar{
     .navbar{
     display:flex;
