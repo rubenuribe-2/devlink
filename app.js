@@ -1,3 +1,4 @@
+//jshint esversion:6
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
@@ -42,9 +43,8 @@ const userSchema = new mongoose.Schema({
   name: String,
   profilePic: String,
   desc: String,
-  skills: [],
-  interests: [],
-  links: [],
+  skills: String,
+  interests: String,
   likes: [],
   connections: []
 });
@@ -146,18 +146,34 @@ passport.use(new GoogleStrategy({
 //         }
 //       });
 
+// User.updateOne({_id : "5d74c9a305b7905f78c56ed4"},{name: "Lucas Rollo", skills: "1 2 3", interests: "4 5 6 ", connections: ["ruben@gmail.com", "sabrina@gmail.com"], likes: ["martin@gmail.com"]}, function(err){
+//   if (err){
+//     console.log(err);
+//   }else{
+//     console.log("success update");
+//   }
+// });
+
 app.get("/", function(req, res){
     res.render('home');
 });
 
 app.get("/logg", function(req,res){
+  if (req.isAuthenticated()){
+
     console.log(req.user.connections);
-    const contacts = users[users.map(x => x.email ).indexOf(req.user.email)].connections;
-    const persona = users[users.map(x => x.email ).indexOf(req.user.email)];
+
+    mongoose.set('useCreateIndex', true);
+
+    const contacts =req.user.connections;
+    const persona = req.user;
     const friends=[];
     contacts.forEach(function(contact){
-        const fullContact = users[users.map(x => x.email).indexOf(contact)];
-        friends.push(fullContact)
+      User.find({email: contact}, function(err, foundUsers){
+        friends.push(foundUsers);
+      });
+        // const fullContact = users[users.map(x => x.email).indexOf(contact)];
+        // friends.push(fullContact)
     });
     res.render('loggedin',{persona:persona, friends:friends});
 
@@ -165,9 +181,11 @@ app.get("/logg", function(req,res){
         console.log(`connected to ${socket.id}`);
         socket.on('discover',function(id,user){
           console.log(`discover requested by ${user}`);
-          var friends=Array.from(users[users.map(x=>x.email).indexOf(user)].connections);
+          // var friends=Array.from(users[users.map(x=>x.email).indexOf(user)].connections);
+          var friends=Array.from(req.user.connections);
           friends.push(user);
-          friends = friends.concat(users[users.map(x=>x.email).indexOf(user)].likes);
+          // friends = friends.concat(users[users.map(x=>x.email).indexOf(user)].likes);
+          friends = friends.concat(req.user.likes)
           console.log(friends);
           var lineUp=users.filter(function(user){
             // console.log(user.email);
@@ -184,8 +202,8 @@ app.get("/logg", function(req,res){
         socket.on('profile',function(id,profile){
             console.log(`profile requested by ${id} for ${profile}`);
             //change to mongoose
-            const sendProfile=users[users.map(x=>x.email).indexOf(profile)];
-
+            // const sendProfile=users[users.map(x=>x.email).indexOf(profile)];
+              const sendProfile=req.user;
 
 
 
@@ -193,8 +211,18 @@ app.get("/logg", function(req,res){
             socket.emit('profile',sendProfile);//send the profile data
         });
         socket.on('liked', function(id,liker,liked){
-          likerPersona=users[users.map(x=>x.email).indexOf(liker)];
-          likedPersona=users[users.map(x=>x.email).indexOf(liked)];
+          let likerPersona;
+          let likedPersona;
+
+          User.find({email: liker}, function(err, foundLiker){
+            likerPersona = foundLiker;
+          });
+
+          User.find({email: liked}, function(err, foundLiked){
+            likedPersona = foundLiked;
+          });
+          // likerPersona=users[users.map(x=>x.email).indexOf(liker)];
+          // likedPersona=users[users.map(x=>x.email).indexOf(liked)];
           likerPersona.likes.push(liked);
           if(likedPersona.likes.includes(liker)){
             console.log("adding friendship");
@@ -218,7 +246,9 @@ app.get("/logg", function(req,res){
             socket.to(id).emit('message');//send the data that is needed for message
         });
     });
-
+  }else{
+    res.redirect("/login")
+  }
 
 });
 
