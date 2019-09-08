@@ -1,13 +1,18 @@
+//jshint esversion:6
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require("mongoose");
+require('dotenv').config()
 const session = require('express-session');
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const findOrCreate = require('mongoose-findorcreate');
-require('dotenv').config()
+const SendBird = require("sendbird");
+
+const sb = new SendBird({appId: process.env.APP_ID});
 
 const app= express();
 app.set('view engine', 'ejs');
@@ -59,6 +64,10 @@ const users=[{
 
 mongoose.connect("mongodb://localhost:27017/devlinkDB", {useNewUrlParser: true});
 
+
+
+
+
 const userSchema = new mongoose.Schema({
   username: String,
   password: String,
@@ -104,6 +113,7 @@ passport.use(new GoogleStrategy({
     });
   }
 ));
+
 
 app.get("/", function(req, res){
     res.render('home');
@@ -170,6 +180,7 @@ app.post("/login", function(req, res){
     } else {
       passport.authenticate("local")(req, res, function(){
         res.redirect("/log");
+        console.log(req.user.username);
       });
     }
   });
@@ -181,6 +192,26 @@ app.get("/logout", function(req, res){
   req.logout();
   res.redirect("/");
 });
+
+// app.get("/connect", function(req,res){
+//   currentUser = req.user.username;
+//
+//   sb.connect(currentUser, function(user, error) {
+//     if (error) {
+//         return;
+//       }
+//
+//   });
+//
+//   sb.OpenChannel.createChannel(function(openChannel, error) {
+//     if (error) {
+//         return;
+//     }
+// });
+//
+// });
+
+
 
 
 app.listen(3000,function(){
