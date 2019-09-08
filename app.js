@@ -9,6 +9,10 @@ const app= express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 io.set('origins', '*:*');
+const SendBird= require("sendbird");
+const request = require("request");
+
+var sb = new SendBird({appId: process.env.APP_ID});
 // const GoogleStrategy = require('passport-google-oauth20').Strategy;
 // const findOrCreate = require('mongoose-findorcreate');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
@@ -37,7 +41,8 @@ const users=[{
     skills: ["js","node","flask","basketweaving","php","cloud","gcp","aws","react"],
     interests: ["smoking","chorizo and egg"],
     links: ["me.dev"],
-    connections: ["erikw@gmail.com", "rubenu@gmail.com", "SabrinaP@gmail.com"]
+    connections: ["erikw@gmail.com", "rubenu@gmail.com", "SabrinaP@gmail.com", "lucasRollo@gmail.com"],
+    likes:[]
 },
 {
     email: "erikw@gmail.com",
@@ -48,7 +53,8 @@ const users=[{
     skills: ["js","flask"],
     interests: ["cows","running"],
     links: ["me.dev"],
-    connections: ["johnf@gmail.com"]
+    connections: ["johnf@gmail.com"],
+    likes:[]
 },{
     email: "lucasRollo@gmail.com",
     password: "abcd",
@@ -58,7 +64,8 @@ const users=[{
     skills: ["js","flask"],
     interests: ["cows","eating"],
     links: ["me.dev"],
-    connections: ["johnf@gmail.com"]
+    connections: ["johnf@gmail.com","rubenu@gmail.com"],
+    likes:[]
 },{
     email: "rubenu@gmail.com",
     password: "abcd",
@@ -68,7 +75,8 @@ const users=[{
     skills: ["js","flask"],
     interests: ["cows","eating"],
     links: ["me.dev"],
-    connections: ["johnf@gmail.com"]
+    connections: ["johnf@gmail.com","lucasRollo@gmail.com"],
+    likes:["SabrinaP@gmail.com"]
 },{
     email: "SabrinaP@gmail.com",
     password: "abcd",
@@ -78,7 +86,8 @@ const users=[{
     skills: ["js","flask"],
     interests: ["cows","eating"],
     links: ["me.dev"],
-    connections: ["johnf@gmail.com"]
+    connections: ["johnf@gmail.com"],
+    likes:[]
 }
 ];
 
@@ -134,9 +143,10 @@ app.get("/", function(req, res){
     res.render('home');
 });
 
-app.get("/log", function(req,res){
-    const contacts = users[users.map(x => x.email ).indexOf("johnf@gmail.com")].connections;
-    const persona = users[users.map(x => x.email ).indexOf("johnf@gmail.com")];
+app.get("/logg:user", function(req,res){
+    const person = req.params.user
+    const contacts = users[users.map(x => x.email ).indexOf(person)].connections;
+    const persona = users[users.map(x => x.email ).indexOf(person)];
     const friends=[];
     contacts.forEach(function(contact){
         const fullContact = users[users.map(x => x.email).indexOf(contact)];
@@ -147,14 +157,22 @@ app.get("/log", function(req,res){
     const server=io.of('/').on('connection',function(socket){
         console.log(`connected to ${socket.id}`);
         socket.on('discover',function(id,user){
-            console.log(`discover requested by ${id}`);
+          console.log(`discover requested by ${user}`);
+          var friends=Array.from(users[users.map(x=>x.email).indexOf(user)].connections);
+          friends.push(user);
+          friends = friends.concat(users[users.map(x=>x.email).indexOf(user)].likes);
+          console.log(friends);
+          var lineUp=users.filter(function(user){
+            // console.log(user.email);
+            if(!friends.includes(user.email)){
+              console.log(`adding${user.email}`);
+              return(user.email);
+            }
+          });
+          console.log(lineUp);
 
 
-
-            //parse and remove connections
-
-
-            socket.emit('discover',users);//send the data that is needed for discover
+          socket.emit('discover',lineUp);//send the data that is needed for discover
         });
         socket.on('profile',function(id,profile){
             console.log(`profile requested by ${id} for ${profile}`);
@@ -167,8 +185,28 @@ app.get("/log", function(req,res){
             //get the profile data for the given person
             socket.emit('profile',sendProfile);//send the profile data
         });
+        socket.on('liked', function(id,liker,liked){
+          likerPersona=users[users.map(x=>x.email).indexOf(liker)];
+          likedPersona=users[users.map(x=>x.email).indexOf(liked)];
+          likerPersona.likes.push(liked);
+          if(likedPersona.likes.includes(liker)){
+            console.log("adding friendship");
+            likedPersona.connections.push(liker);
+            console.log(`adding ${liker} to ${liked}`);
+            likerPersona.connections.push(liked);
+            console.log(`adding ${liked} to ${liker}`);
+            likerPersona.likes.splice(likerPersona.likes.indexOf(liked),1);
+            console.log(likerPersona);
+            likedPersona.likes.splice(likedPersona.likes.indexOf(liker),1);
+            console.log(likedPersona);
+            socket.emit('new-connection');
+          }
+        });
         socket.on('message',function(id,message){
             console.log(`message requested by ${id}`);
+            sb.connect(id,function(user,error){
+
+            });
             //send the user they want to talk to
             socket.to(id).emit('message');//send the data that is needed for message
         });
@@ -187,8 +225,12 @@ app.get("/register", function(req,res){
         console.log(err);
         res.redirect("/register");
       }else{
+        var url=`https://api-{${process.env.APP_ID}}.sendbird.com/v3/users`;
+        request({url: url, json: true},function(error,response){
+            
+        });
         passport.authenticate("local")(req, res, function(){
-          res.redirect("/log");
+          res.redirect("/logg");
         });
       }
 
@@ -208,7 +250,7 @@ app.get("/register", function(req,res){
     });
 
 app.get("/login", function(req,res){
-  res.render("login")
+  res.render("login");
 });
 
 app.post("/login", function(req, res){
@@ -223,7 +265,7 @@ app.post("/login", function(req, res){
       console.log(err);
     } else {
       passport.authenticate("local")(req, res, function(){
-        res.redirect("/log");
+        res.redirect("/logg");
       });
     }
   });

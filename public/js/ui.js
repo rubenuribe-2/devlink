@@ -106,6 +106,10 @@ socket.on('connect',function(){
     socket.on('discover',function(data){
         console.log("in-discover");
         selectable = data;
+        if(selectable.length==0){
+            page.innerHTML=ejs.render("no-more-devs");
+
+        } else {
         page.innerHTML=ejs.render(`
         <div class="mini-card">
             <img src="img/<%=user.profilePic%>" alt="profile picture">
@@ -119,6 +123,7 @@ socket.on('connect',function(){
             </div>
         </div>
         `,{user:selectable[selectable.length-1]});
+    }
 
         
         
