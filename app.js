@@ -32,6 +32,23 @@ app.use(session({
   app.use(passport.initialize());
   app.use(passport.session());
 
+mongoose.connect("mongodb://localhost:27017/devlinkDB", {useNewUrlParser: true});
+mongoose.set('useCreateIndex', true);
+
+const userSchema = new mongoose.Schema({
+  email: String,
+  password: String,
+  googleId: String,
+  name: String,
+  profilePic: String,
+  desc: String,
+  skills: [],
+  interests: [],
+  links: [],
+  likes: [],
+  connections: []
+});
+
 const users=[{
     email: "johnf@gmail.com",
     password: "1234",
@@ -91,24 +108,6 @@ const users=[{
 }
 ];
 
-mongoose.connect("mongodb://localhost:27017/devlinkDB", {useNewUrlParser: true});
-
-const userSchema = new mongoose.Schema({
-  username: String,
-  password: String,
-  googleId: String,
-  // name: String,
-  // profilePic: String,
-  // desc: String,
-  // skills: [],
-  // interests: [],
-  // links: [],
-  // liked: [],
-  // connections: []
-});
-
-// User1.save();
-
 userSchema.plugin(passportLocalMongoose);
 userSchema.plugin(findOrCreate)
 
@@ -139,14 +138,22 @@ passport.use(new GoogleStrategy({
   }
 ));
 
+// User.insertMany(users, function(err){
+//         if (err) {
+//           console.log(err);
+//         } else {
+//           console.log("Successfully saved default items to DB.");
+//         }
+//       });
+
 app.get("/", function(req, res){
     res.render('home');
 });
 
-app.get("/logg:user", function(req,res){
-    const person = req.params.user
-    const contacts = users[users.map(x => x.email ).indexOf(person)].connections;
-    const persona = users[users.map(x => x.email ).indexOf(person)];
+app.get("/logg", function(req,res){
+    console.log(req.user.connections);
+    const contacts = users[users.map(x => x.email ).indexOf(req.user.email)].connections;
+    const persona = users[users.map(x => x.email ).indexOf(req.user.email)];
     const friends=[];
     contacts.forEach(function(contact){
         const fullContact = users[users.map(x => x.email).indexOf(contact)];
@@ -222,13 +229,10 @@ app.get("/register", function(req,res){
   app.post("/register", function(req,res){
     User.register({username: req.body.username}, req.body.password, function(err, user){
       if(err){
+        console.log("in erorr");
         console.log(err);
         res.redirect("/register");
       }else{
-        var url=`https://api-{${process.env.APP_ID}}.sendbird.com/v3/users`;
-        request({url: url, json: true},function(error,response){
-
-        });
         passport.authenticate("local")(req, res, function(){
           res.redirect("/logg");
         });
@@ -246,7 +250,7 @@ app.get("/register", function(req,res){
     passport.authenticate('google', { failureRedirect: '/login' }),
     function(req, res) {
       // Successful authentication, redirect home.
-      res.redirect('/log');
+      res.redirect('/logg');
     });
 
 app.get("/login", function(req,res){
@@ -277,10 +281,6 @@ app.get("/logout", function(req, res){
   req.logout();
   res.redirect("/");
 });
-
-
-
-
 
 
 http.listen(process.env.PORT || 3000, function(err){
