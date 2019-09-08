@@ -109,9 +109,14 @@ app.get("/log", function(req,res){
         });
         socket.on('profile',function(id,profile){
             console.log(`profile requested by ${id} for ${profile}`);
-            
+            //change to mongoose
+            const sendProfile=users[users.map(x=>x.email).indexOf(profile)];
+
+
+
+
             //get the profile data for the given person
-            socket.emit('profile',users[1]);//send the profile data
+            socket.emit('profile',sendProfile);//send the profile data
         });
         socket.on('message',function(id,message){
             console.log(`message requested by ${id}`);

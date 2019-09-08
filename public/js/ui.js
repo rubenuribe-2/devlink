@@ -2,9 +2,6 @@ var state="profile";
 const discoverBtn=document.getElementById("discover-tab");
 const messageBtn=document.getElementById("message-tab");
 const profileBtn=document.getElementById("profile-tab");
-const profile = ejs.compile('partials/profile');
-const message = ejs.compile('publicpartials/message');
-const discover = ejs.compile('partials/discover');
 const contacts = [].slice.call(document.getElementsByClassName("contact"));
 
 const page=document.getElementById('page');
@@ -34,7 +31,7 @@ messageBtn.addEventListener('click',function(){
 
 profileBtn.addEventListener('click',function(){
     state="profile";
-    socket.emit('profile',socket.id,user.email);
+    socket.emit('profile',socket.id,email);
 });
 
 socket.on('connect',function(){

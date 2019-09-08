@@ -14,7 +14,9 @@
         <%- include('partials/profile',{user:persona});%>
     </div>
 </div>
-
+<script>
+    const email="<%=persona.email%>";
+</script>
 
 <script src="js/socket.io-client/dist/socket.io.js"></script>
 <script src="js/ejs.js"></script>
