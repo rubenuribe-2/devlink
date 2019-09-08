@@ -1,20 +1,22 @@
 <%-include('partials/header2');%>
 <div class=full-screen>
-    <div class="contacts">
-        <div id="contact-header">
+    <div class="contacts" id="contacts">
+        <div id="contact-header" >
             <h2>Contacts:</h2>
         </div>
         
         <%- include('partials/contacts',{friends:friends}); %>
     </div>
-    <div class="tabs">
+    <div class="tabs" id="tabs">
         <%- include('partials/tabs')%>
     </div>
-    <div class="page">
+    <div class="page" id="page">
         <%- include('partials/profile',{user:persona});%>
     </div>
 </div>
 
 
-
+<script src="js/socket.io-client/dist/socket.io.js"></script>
+<script src="js/ejs.js"></script>
+<script src="js/ui.js"></script>
 <%-include('partials/footer');%>

@@ -1,7 +1,7 @@
 <div class="contact-wrapper">
 <ul class="">
 <% friends.forEach(function(friend){ %>
-    <div class="contact">
+    <div class="contact" id="<%=friend.email%>">
         <img src="img/<%=friend.profilePic%>" alt="">
         <h2><%=friend.name%></h2>
     </div>

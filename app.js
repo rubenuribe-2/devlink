@@ -7,10 +7,13 @@ const mongoose = require("mongoose");
 const session = require('express-session');
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
+const app= express();
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
+io.set('origins', '*:*');
 // const GoogleStrategy = require('passport-google-oauth20').Strategy;
 // const findOrCreate = require('mongoose-findorcreate');
 
-const app= express();
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
@@ -29,9 +32,9 @@ const users=[{
     password: "1234",
     name: "Martin Wnorowski",
     profilePic: "default-pic.jpg",
-    desc: "Hi my name is Martin I like to study all the time, and get shit done. come join me on my adventure to build something cool",
+    desc: "Hi my name is Martin I like to get shit done. come join me on my adventure to build something cool",
     skills: ["js","node","flask","basketweaving","php","cloud","gcp","aws","react"],
-    interests: ["cows","walking"],
+    interests: ["smoking","chorizo and egg"],
     links: ["me.dev"],
     connections: ["erikw@gmail.com", "rubenu@gmail.com"]
 },
@@ -91,15 +94,33 @@ app.get("/", function(req, res){
 app.get("/log", function(req,res){
     const contacts = users[users.map(x => x.email ).indexOf("johnf@gmail.com")].connections;
     const persona = users[users.map(x => x.email ).indexOf("johnf@gmail.com")];
-    console.log("\n\n\n"+contacts);
     const friends=[];
     contacts.forEach(function(contact){ 
         const fullContact = users[users.map(x => x.email).indexOf(contact)];
         friends.push(fullContact)
     });
-    console.log(friends);
     res.render('loggedin',{persona:persona, friends:friends});
     
+    const server=io.of('/').on('connection',function(socket){
+        console.log(`connected to ${socket.id}`);
+        socket.on('discover',function(id){
+            console.log(`discover requested by ${id}`);
+            socket.to(id).emit('discover');//send the data that is needed for discover
+        });
+        socket.on('profile',function(id,profile){
+            console.log(`profile requested by ${id} for ${profile}`);
+            
+            //get the profile data for the given person
+            socket.emit('profile',users[1]);//send the profile data
+        });
+        socket.on('message',function(id,message){
+            console.log(`message requested by ${id}`);
+            //send the user they want to talk to
+            socket.to(id).emit('message');//send the data that is needed for message
+        });
+    });
+    
+
 });
 
 app.get("/register", function(req,res){
@@ -151,14 +172,20 @@ app.post("/login", function(req, res){
 
 
 
-
-
-
-
-
-
-
-
-app.listen(3000,function(){
-    console.log("listening on port 3000");
+http.listen(process.env.PORT || 3000, function(err){
+    if(err){
+        console.log(err);
+    } else {
+        console.log("Server Started");
+    }
 });
+
+
+
+
+
+
+
+// app.listen(3000,function(){
+//     console.log("listening on port 3000");
+// });
