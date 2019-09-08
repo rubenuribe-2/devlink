@@ -8,7 +8,13 @@
   display: -ms-grid;
   display: grid;
   height: calc(100vh - 58px);
-  grid-template: "c t t t" 50px "c p p p" auto "c p p p" auto "c p p p" auto / 20% auto auto auto;
+  grid-template: "c t t t" 50px "c p p p" auto "c p p p" auto "c b b b" 1px / 20% auto auto auto;
+}
+
+.buttons {
+  grid-area: b;
+  background: #040f0f;
+  position: relative;
 }
 
 .tabs {
@@ -113,8 +119,13 @@
 }
 
 .page {
+  position: relative;
   overflow: scroll;
   scrollbar-width: none;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
   grid-area: p;
 }
 
@@ -159,5 +170,54 @@
   -ms-flex-pack: distribute;
       justify-content: space-around;
   list-style: circle;
+}
+
+#yes, #no {
+  width: 75px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.button {
+  position: absolute;
+  bottom: 0;
+}
+
+#no {
+  left: 0;
+}
+
+#yes {
+  right: 0;
+}
+
+.button:hover {
+  cursor: pointer;
+}
+
+.mini-card {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  background: #2d3a3a;
+  color: #fcfffc;
+  max-width: 75%;
+  margin: auto;
+}
+
+.mini-card img {
+  width: 350px;
+  height: 350px;
+  padding: 25px;
+}
+
+.mini-card .side {
+  padding: 25px;
 }
 /*# sourceMappingURL=loggedstyle.css.map */
