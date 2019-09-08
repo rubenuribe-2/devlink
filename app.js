@@ -36,7 +36,7 @@ const users=[{
     skills: ["js","node","flask","basketweaving","php","cloud","gcp","aws","react"],
     interests: ["smoking","chorizo and egg"],
     links: ["me.dev"],
-    connections: ["erikw@gmail.com", "rubenu@gmail.com"]
+    connections: ["erikw@gmail.com", "rubenu@gmail.com", "SabrinaP@gmail.com"]
 },
 {
     email: "erikw@gmail.com",
@@ -49,9 +49,29 @@ const users=[{
     links: ["me.dev"],
     connections: ["johnf@gmail.com"]
 },{
+    email: "lucasRollo@gmail.com",
+    password: "abcd",
+    name: "Lucas Rollo",
+    profilePic: "default-pic.jpg",
+    desc: "Web Dev",
+    skills: ["js","flask"],
+    interests: ["cows","eating"],
+    links: ["me.dev"],
+    connections: ["johnf@gmail.com"]
+},{
     email: "rubenu@gmail.com",
     password: "abcd",
     name: "Ruben Uribe",
+    profilePic: "default-pic.jpg",
+    desc: "Web Dev",
+    skills: ["js","flask"],
+    interests: ["cows","eating"],
+    links: ["me.dev"],
+    connections: ["johnf@gmail.com"]
+},{
+    email: "SabrinaP@gmail.com",
+    password: "abcd",
+    name: "Sabrina Pena",
     profilePic: "default-pic.jpg",
     desc: "Web Dev",
     skills: ["js","flask"],
