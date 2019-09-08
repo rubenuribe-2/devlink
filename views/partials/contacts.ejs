@@ -2,8 +2,8 @@
 <ul class="">
 <% friends.forEach(function(friend){ %>
     <div class="contact" id="<%=friend.email%>">
-            <% if(user.profilePic){%>
-            <img src="<%=user.profilePic%>">
+            <% if(friend.profilePic){%>
+            <img src="<%=friend.profilePic%>">
         <%} else {%>
             <img src="img/default-pic.jpg">
         <%}%>
