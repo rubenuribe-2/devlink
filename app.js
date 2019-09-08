@@ -152,13 +152,13 @@ passport.use(new GoogleStrategy({
 //         }
 //       });
 
-// User.updateOne({_id : "5d74c9a305b7905f78c56ed4"},{name: "Lucas Rollo", skills: "1 2 3", interests: "4 5 6 ", connections: ["ruben@gmail.com", "sabrina@gmail.com"], likes: ["martin@gmail.com"]}, function(err){
-//   if (err){
-//     console.log(err);
-//   }else{
-//     console.log("success update");
-//   }
-// });
+User.updateOne({_id : "5d74d8a4d83e0143186a30c4"},{name: "Lucas Rollo", skills: "1 2 3", interests: "4 5 6 ", connections: ["ruben@gmail.com", "sabrina@gmail.com"], likes: ["martin@gmail.com"]}, function(err){
+  if (err){
+    console.log(err);
+  }else{
+    console.log("success update");
+  }
+});
 
 app.get("/", function(req, res){
     res.render('home');
