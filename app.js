@@ -151,8 +151,8 @@ passport.use(new GoogleStrategy({
 //           console.log("Successfully saved default items to DB.");
 //         }
 //       });
-
-User.updateOne({_id : "5d74d8a4d83e0143186a30c4"},{name: "Lucas Rollo", skills: "1 2 3", interests: "4 5 6 ", connections: ["ruben@gmail.com", "sabrina@gmail.com"], likes: ["martin@gmail.com"]}, function(err){
+//
+User.updateOne({_id : "5d74dcecf7e95d50d4c21b25"},{name: "Lucas Rollo", skills: "1 2 3", interests: "4 5 6 ", connections: ["ruben@gmail.com", "sabrina@gmail.com"], likes: ["martin@gmail.com"]}, function(err){
   if (err){
     console.log(err);
   }else{
@@ -167,21 +167,32 @@ app.get("/", function(req, res){
 app.get("/logg", function(req,res){
   if (req.isAuthenticated()){
 
-    console.log(req.user.connections);
-
     mongoose.set('useCreateIndex', true);
 
     const contacts =req.user.connections;
     const persona = req.user;
-    const friends=[];
-    contacts.forEach(function(contact){
-      User.find({email: contact}, function(err, foundUsers){
-        friends.push(foundUsers);
+    var friends=[];
+
+    for (i = 0; i < contacts.length; i++){
+      User.find({username: contacts[i]}, function(err, foundUsers){
+        console.log(foundUsers);
+        if(err){
+          console.log(err);
+        }else{
+          if(foundUsers[0]){
+            friends.push(foundUsers[0]);
+            console.log(`adding ${foundUsers} to friends`);
+            console.log(`friends: ${friends}`);
+          }
+        }
+      }).then(function(){
+        res.render('loggedin',{persona:persona, friends:friends})
       });
+      console.log(`friends: ${friends}`);
         // const fullContact = users[users.map(x => x.email).indexOf(contact)];
         // friends.push(fullContact)
-    });
-    res.render('loggedin',{persona:persona, friends:friends});
+    }
+    console.log(`friends: ${friends}`);
 
     const server=io.of('/').on('connection',function(socket){
         console.log(`connected to ${socket.id}`);
