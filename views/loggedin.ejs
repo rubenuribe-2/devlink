@@ -4,8 +4,9 @@
         <div id="contact-header" >
             <h2>Contacts:</h2>
         </div>
-        
+        <b id="friend-refresh">
         <%- include('partials/contacts',{friends:friends}); %>
+        </b>
     </div>
     <div class="tabs" id="tabs">
         <%- include('partials/tabs')%>
@@ -23,6 +24,6 @@
 <script src="js/sendbird.min.js"></script>
 <script src="js/socket.io-client/dist/socket.io.js"></script>
 <script src="js/ejs.js"></script>
-<script src="js/ui.js"></script>
+<script src="js/ui.js" id="reload-me"></script>
 <!-- <script src="js/messages.js"></script> -->
 <%-include('partials/footer');%>

@@ -6,8 +6,18 @@ const contacts = [].slice.call(document.getElementsByClassName("contact"));
 let selectable = [];
 let no = document.getElementById("no");
 let yes = document.getElementById("yes");
-
+const contactDir=document.getElementById('friend-refresh');
 const page=document.getElementById('page');
+
+function reloadScript() {
+    with(document) {
+     var newscr = createElement('script');
+     newscr.id = 'reloadMe';
+     newscr.appendChild(createTextNode(getElementById('reloadMe').innerHTML));
+     body.removeChild(getElementById('reloadMe'));
+     body.appendChild(newscr);
+    }
+   }
 
 contacts.forEach((contact)=>{
     contact.addEventListener("click",function(){
@@ -101,7 +111,21 @@ socket.on('connect',function(){
     </div>`,{user:user});
 
     });
-
+    socket.on('new-connection',function(friends){
+        contactDir.innerHTML=ejs.render(
+            `<div class="contact-wrapper">
+            <ul class="">
+            <% friends.forEach(function(friend){ %>
+                <div class="contact" id="<%=friend.email%>">
+                    <img src="img/<%=friend.profilePic%>" alt="">
+                    <h2><%=friend.name%></h2>
+                </div>
+            <% }); %>
+            </ul>
+            </div>`,{friends:friends}
+        );
+        reloadScript();
+    });
 
     socket.on('discover',function(data){
         console.log("in-discover");
@@ -159,6 +183,7 @@ yes.addEventListener('click',function(){
     var target=selectable.pop();
     if(selectable.length==0){
         page.innerHTML=ejs.render("no-more-devs");
+        socket.emit('liked',socket.id,email,target.email);
     } else {
     page.innerHTML=ejs.render(`
         <div class="mini-card">

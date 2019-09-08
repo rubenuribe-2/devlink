@@ -41,7 +41,7 @@ const users=[{
     skills: ["js","node","flask","basketweaving","php","cloud","gcp","aws","react"],
     interests: ["smoking","chorizo and egg"],
     links: ["me.dev"],
-    connections: ["erikw@gmail.com", "rubenu@gmail.com", "SabrinaP@gmail.com", "lucasRollo@gmail.com"],
+    connections: [],
     likes:[]
 },
 {
@@ -64,7 +64,7 @@ const users=[{
     skills: ["js","flask"],
     interests: ["cows","eating"],
     links: ["me.dev"],
-    connections: ["johnf@gmail.com","rubenu@gmail.com"],
+    connections: ["rubenu@gmail.com"],
     likes:[]
 },{
     email: "rubenu@gmail.com",
@@ -75,7 +75,7 @@ const users=[{
     skills: ["js","flask"],
     interests: ["cows","eating"],
     links: ["me.dev"],
-    connections: ["johnf@gmail.com","lucasRollo@gmail.com"],
+    connections: ["lucasRollo@gmail.com"],
     likes:["SabrinaP@gmail.com"]
 },{
     email: "SabrinaP@gmail.com",
@@ -86,7 +86,7 @@ const users=[{
     skills: ["js","flask"],
     interests: ["cows","eating"],
     links: ["me.dev"],
-    connections: ["johnf@gmail.com"],
+    connections: [],
     likes:[]
 }
 ];
@@ -97,14 +97,14 @@ const userSchema = new mongoose.Schema({
   username: String,
   password: String,
   googleId: String,
-  // name: String,
-  // profilePic: String,
-  // desc: String,
-  // skills: [],
-  // interests: [],
-  // links: [],
-  // liked: [],
-  // connections: []
+  name: String,
+  profilePic: String,
+  desc: String,
+  skills: [],
+  interests: [],
+  links: [],
+  liked: [],
+  connections: []
 });
 
 // User1.save();
@@ -199,7 +199,14 @@ app.get("/logg:user", function(req,res){
             console.log(likerPersona);
             likedPersona.likes.splice(likedPersona.likes.indexOf(liker),1);
             console.log(likedPersona);
-            socket.emit('new-connection');
+            const friends=[];
+            contacts.forEach(function(contact){
+            const fullContact = users[users.map(x => x.email).indexOf(contact)];
+            friends.push(fullContact)
+            socket.emit('new-connection',friends);
+    });
+            // res.redirect('back');
+            
           }
         });
         socket.on('message',function(id,message){
@@ -225,10 +232,10 @@ app.get("/register", function(req,res){
         console.log(err);
         res.redirect("/register");
       }else{
-        var url=`https://api-{${process.env.APP_ID}}.sendbird.com/v3/users`;
-        request({url: url, json: true},function(error,response){
+        // var url=`https://api-{${process.env.APP_ID}}.sendbird.com/v3/users`;
+        // request({url: url, json: true},function(error,response){
             
-        });
+        // });
         passport.authenticate("local")(req, res, function(){
           res.redirect("/logg");
         });
@@ -246,7 +253,7 @@ app.get("/register", function(req,res){
     passport.authenticate('google', { failureRedirect: '/login' }),
     function(req, res) {
       // Successful authentication, redirect home.
-      res.redirect('/log');
+      res.redirect('/logg');
     });
 
 app.get("/login", function(req,res){
@@ -269,6 +276,13 @@ app.post("/login", function(req, res){
       });
     }
   });
+
+});
+
+app.get("/edit-profile",function(req,res){
+  res.render('edit-profile',{});
+});
+app.get("/logout",function(req,res){
 
 });
 
