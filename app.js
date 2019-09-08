@@ -339,11 +339,13 @@ app.post("/edit-profile",function(req,res){
     const desc=req.body.desc;
     const skills=req.body.skills;
     const interests=req.body.interests;
+
     User.updateOne({_id:req.user._id},{name: name, desc: desc, skills: skills, interests: interests}, function(err){
       if(err){
         console.log(err);
       }else{
         console.log("successfully updated");
+
       }
     });
     res.redirect('/logg');
