@@ -21,7 +21,12 @@ $color5: rgba(252, 255, 252, 1);
                 "c t t t" 50px
                 "c p p p" auto
                 "c p p p" auto
-                "c p p p" auto / 20% auto auto auto;
+                "c b b b" 1px / 20% auto auto auto;
+}
+.buttons{
+    grid-area: b;
+    background: $color1;
+    position: relative;
 }
 .tabs{
     grid-area: t;
@@ -100,8 +105,10 @@ $color5: rgba(252, 255, 252, 1);
 
 
 .page{
+    position: relative;
     overflow: scroll;
     scrollbar-width: none;
+    flex-direction: row;
     .profile-container{
         position: relative;
         h3{
@@ -132,5 +139,41 @@ $color5: rgba(252, 255, 252, 1);
         flex-direction: row;
         justify-content: space-around;
         list-style: circle;
+    }
+}
+#yes, #no{
+    width: 75px;
+}
+.hidden{
+    display:none !important;
+}
+.button{
+    position: absolute;
+    bottom: 0;
+}
+#no{
+    left: 0;
+}
+#yes{
+    right: 0;
+}
+.button:hover{
+    cursor: pointer;
+}
+.mini-card{
+    display: flex;
+    flex-direction: row;
+    background: $color4;
+    color: $color5;
+    max-width: 75%;
+    margin: auto;
+    img{
+        width: 350px;
+        height: 350px;
+        padding: 25px;
+    }
+    .side{
+        padding:25px;
+        // max-width: 500px;
     }
 }

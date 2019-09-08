@@ -55,7 +55,7 @@ const users=[{
     profilePic: "default-pic.jpg",
     desc: "Web Dev",
     skills: ["js","flask"],
-    interests: ["cows","running"],
+    interests: ["cows","eating"],
     links: ["me.dev"],
     connections: ["johnf@gmail.com"]
 }
@@ -103,9 +103,15 @@ app.get("/log", function(req,res){
     
     const server=io.of('/').on('connection',function(socket){
         console.log(`connected to ${socket.id}`);
-        socket.on('discover',function(id){
+        socket.on('discover',function(id,user){
             console.log(`discover requested by ${id}`);
-            socket.to(id).emit('discover');//send the data that is needed for discover
+
+
+
+            //parse and remove connections
+
+
+            socket.emit('discover',users);//send the data that is needed for discover
         });
         socket.on('profile',function(id,profile){
             console.log(`profile requested by ${id} for ${profile}`);

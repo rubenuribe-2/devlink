@@ -13,6 +13,9 @@
     <div class="page" id="page">
         <%- include('partials/profile',{user:persona});%>
     </div>
+    <div class="buttons" id="buttons">
+        <%- include('partials/buttons');%>
+    </div>
 </div>
 <script>
     const email="<%=persona.email%>";
