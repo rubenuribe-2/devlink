@@ -138,7 +138,7 @@ passport.use(new GoogleStrategy({
   },
   function(accessToken, refreshToken, profile, cb) {
     console.log(profile);
-    User.findOrCreate({ googleId: profile.id, name:profile.displayName, profilePic: profile.picture}, function (err, user) {
+    User.findOrCreate({ googleId: profile.id, name:profile.displayName, profilePic: profile.photos[0].value}, function (err, user) {
       return cb(err, user);
     });
   }
@@ -320,6 +320,7 @@ app.post("/login", function(req, res){
 });
 
 app.get("/edit-profile",function(req,res){
+  console.log(req.user);
   res.render('edit-profile',{user:req.user});
 });
 app.post("/edit-profile",function(req,res){
@@ -327,7 +328,13 @@ app.post("/edit-profile",function(req,res){
     const desc=req.body.desc;
     const skills=req.body.skills;
     const interests=req.body.interests;
-    User.updateOne({_id:req.user._id},{name: name, desc: desc, skills: skills, interests: interests});
+    User.updateOne({_id:req.user._id},{name: name, desc: desc, skills: skills, interests: interests},function(err){
+      if(err){
+        console.log(err);
+      } else {
+        console.log("sucess");
+      }
+    });
     res.redirect('/logg');
 });
 app.get("/logout",function(req,res){

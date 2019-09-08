@@ -80,33 +80,19 @@ socket.on('connect',function(){
             <h3><%=user.desc%></h3>
         </div>
     </div>
-        <div class="links"> 
-            <h1>Links:</h1>
-            <hr>
-            <ul>
-            <%user.links.forEach((link)=>{ %>
-                <li><h5> <%-link%> </h5></li>
-            <%});%>
-        </ul>
-        </div>
-        <div class="Skills">
+    <div class="Skills">
             <h1>Skills:</h1>
             <hr>
-            <ul>
-            <%user.skills.forEach((skill)=>{ %>
-                <li><h5> <%-skill%> </h5></li>
-            <%});%>
-            </ul>
+            
+                <h5> <%=user.skills%> </h5>
+            
         </div>
-    
+
         <div class="Interests">
             <h1>Interests:</h1>
             <hr>
-            <ul>
-            <%user.interests.forEach((interest)=>{ %>
-                <li><h5> <%-interest%> </h5></li>
-            <%});%>
-            </ul>
+                <h5> <%=user.interests%> </h5>
+            
         </div>
     </div>`,{user:user});
 

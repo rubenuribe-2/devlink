@@ -1,6 +1,10 @@
 <div class="profile">
     <div class="profile-container">
-    <img src="img/<%=user.profilePic%>">
+        <% if(user.profilePic){%>
+            <img src="<%=user.profilePic%>" width="350px" height="350px">
+        <%} else {%>
+            <img src="img/default-pic.jpg" width="350px" height="350px">
+        <%}%>
     <div class="about-user">
         <h1><%=user.name%></h1>
         <h3><%=user.desc%></h3>
