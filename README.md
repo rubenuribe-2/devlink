@@ -1,4 +1,5 @@
-Inspiration
+#Inspiration
+
 With a team of 2 sophomores and a freshman, we have struggled with gaining "relevant experience" for internship opportunities. It's also very difficult to learn the numerous technologies it takes to build a successful application on top of school work and extra-curriculars. That's why we wanted to build a fast-paced and short-term developer matching app to allow students at Texas A&M to quickly start projects together based on their shared interests and skills.
 
 What it does
