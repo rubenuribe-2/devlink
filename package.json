@@ -30,6 +30,6 @@
     "passport-local-mongoose": "^5.0.1",
     "request": "^2.88.0",
     "sendbird": "^3.0.107",
-    "socket.io": "^2.2.0"
+    "socket.io": "^2.5.0"
   }
 }
